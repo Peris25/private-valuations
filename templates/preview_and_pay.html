@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Preview & Confirm{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">Confirm Your Vehicle Details</h2>
+
+<form method="POST" action="/preview" id="locationForm">
+  <div class="card shadow-sm p-4">
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Category</label>
+        <input type="text" name="category" class="form-control" value="{{ user.category }}" readonly>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" value="{{ user.email }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">First Name</label>
+        <input type="text" name="firstName" class="form-control" value="{{ user.firstName }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Last Name</label>
+        <input type="text" name="lastName" class="form-control" value="{{ user.lastName }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Make</label>
+        <input type="text" name="make" class="form-control" value="{{ user.make }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Model</label>
+        <input type="text" name="model" class="form-control" value="{{ user.model }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Phone</label>
+        <input type="text" name="phone" class="form-control" value="{{ user.phone or '254' }}" pattern="254\d{9}" title="Format: 2547XXXXXXXX" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Price (KES)</label>
+        <input type="text" name="price" class="form-control" value="{{ user.price }}" required>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Registration Number</label>
+        <input type="text" name="reg" class="form-control" value="{{ user.reg }}" required>
+      </div>
+
+      <input type="hidden" name="latitude" id="lat" required>
+      <input type="hidden" name="longitude" id="lng" required>
+    </div>
+
+    <div class="mt-4 text-center">
+      <button type="submit" class="btn btn-success btn-lg">Proceed to Payment</button>
+    </div>
+  </div>
+</form>
+
+<script>
+  // Require geolocation before allowing form submission
+  let locationReady = false;
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      document.getElementById('lat').value = position.coords.latitude;
+      document.getElementById('lng').value = position.coords.longitude;
+      locationReady = true;
+    },
+    function(error) {
+      alert("We require your location to assign the nearest solver. Please allow location access and refresh the page.");
+    }
+  );
+
+  document.getElementById("locationForm").addEventListener("submit", function(e) {
+    if (!locationReady) {
+      e.preventDefault();
+      alert("Still retrieving location. Please wait...");
+    }
+  });
+</script>
+
+{% endblock %}

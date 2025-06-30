@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Payment Successful{% endblock %}
+{% block content %}
+
+<div class="text-center">
+  <div class="alert alert-success">
+    <h2 class="mb-3">🎉 Payment Successful</h2>
+    <p>Thank you for choosing <strong>Solvit</strong>, {{ user.first_name }}!</p>
+  </div>
+
+  <p class="lead">We have received your valuation request for:</p>
+
+  <ul class="list-group list-group-flush mb-4">
+    <li class="list-group-item"><strong>Registration:</strong> {{ user.reg }}</li>
+    <li class="list-group-item"><strong>Make:</strong> {{ user.make }}</li>
+    <li class="list-group-item"><strong>Model:</strong> {{ user.model }}</li>
+  </ul>
+
+  <p class="text-muted">Our nearest solver will be in touch with you shortly.</p>
+</div>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Processing Payment{% endblock %}
+{% block content %}
+
+<div class="text-center">
+  <h2 class="text-primary mb-3">STK Push Sent</h2>
+  <p>We sent a payment request to <strong>{{ user.phone }}</strong> for <strong>KES {{ user.price }}</strong>.</p>
+  <p>Please complete the payment on your phone.</p>
+
+  <div class="spinner-border text-success my-4" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <p id="status" class="fw-bold text-muted">Waiting for payment confirmation...</p>
+</div>
+
+<script>
+  function checkPaymentStatus() {
+    fetch("/payment-status")
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          window.location.href = "/success";
+        } else if (data.status === "failed") {
+          document.getElementById("status").innerText = "❌ Payment failed. Kindly refresh the page and try again.";
+        } else {
+          setTimeout(checkPaymentStatus, 3000); 
+        }
+      })
+      .catch(err => {
+        console.error("Error checking payment status:", err);
+        document.getElementById("status").innerText = "⚠️ Network error. Retrying...";
+        setTimeout(checkPaymentStatus, 5000);
+      });
+  }
+
+  window.onload = checkPaymentStatus;
+</script>
+
+{% endblock %}
