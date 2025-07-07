@@ -65,6 +65,7 @@ def pay():
 
     phone = user.get("phone")
     amount = user.get("price")
+    body_type = user.get('bodyType')
 
     response = initiate_stk(phone, amount)
     checkout_id = response.get("CheckoutRequestID")

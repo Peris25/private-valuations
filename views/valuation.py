@@ -14,6 +14,12 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @valuation_bp.route('/private', methods=['GET', 'POST'])
 def private_upload():
+
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'pdf'}
+
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
     if request.method == 'POST':
         first_name = request.form['firstName']
         last_name = request.form['lastName']
@@ -21,21 +27,22 @@ def private_upload():
         phone = request.form['phone']
         logbook = request.files['logbook']
 
-        if logbook:
+        if logbook and allowed_file(logbook.filename):
             filename = secure_filename(logbook.filename)
             path = os.path.join(UPLOAD_FOLDER, filename)
             logbook.save(path)
 
-            reg, make, model = extract_vehicle_info(path)
-            category, price = get_category_and_price(make, model)
+            reg, make, model, body_type, category, price = extract_vehicle_info(path)
 
             session['user'] = {
                 'firstName': first_name, 'lastName': last_name,
                 'email': email, 'phone': phone,
-                'reg': reg, 'make': make, 'model': model,
+                'reg': reg, 'make': make, 'model': model, 'bodyType': body_type,
                 'category': category, 'price': price
             }
             return redirect('/preview')
+        else:
+            return "Invalid file type. Only images and PDF files are allowed.", 400
 
     return render_template("form_upload.html")
 

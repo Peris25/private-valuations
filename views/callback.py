@@ -26,11 +26,15 @@ def daraja_callback():
         logging.warning("✅ CALLBACK ROUTE HIT WITH DATA: %s", data)
     except Exception as e:
         logging.error("❌ Failed to parse JSON: %s", str(e))
-        data = {}
+        return {"ResultCode": 1, "ResultDesc": "Invalid JSON"}, 400
 
     stk_callback = data.get("Body", {}).get("stkCallback", {})
     result_code = stk_callback.get("ResultCode")
     checkout_id = stk_callback.get("CheckoutRequestID")
+
+    if not checkout_id:
+        logging.error("❌ No CheckoutRequestID found in callback")
+        return {"ResultCode": 1, "ResultDesc": "Missing checkout ID"}, 400
 
     payment = PaymentRequest.query.filter_by(checkout_id=checkout_id).first()
 
@@ -52,6 +56,8 @@ def daraja_callback():
                 "longitude": payment.longitude
             }
             post_to_solvit(user_data)
+        else:
+            logging.warning(f"⚠️ Payment failed. ResultCode: {result_code}")
 
     else:
         logging.warning(f"No matching payment found for checkout_id: {checkout_id}")

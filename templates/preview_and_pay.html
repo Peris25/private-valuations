@@ -39,6 +39,11 @@
       </div>
 
       <div class="col-md-6">
+        <label class="form-label">Body Type</label>
+        <input type="text" name="bodyType" class="form-control" value="{{ user.bodyType }}" readonly>
+      </div>
+
+      <div class="col-md-6">
         <label class="form-label">Phone</label>
         <input type="text" name="phone" class="form-control" value="{{ user.phone or '254' }}" pattern="254\d{9}" title="Format: 2547XXXXXXXX" required>
       </div>
