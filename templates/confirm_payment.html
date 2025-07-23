@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Confirm Payment Details{% endblock %}
+{% block content %}
+
+<h2 class="mb-4 text-center">Confirm Payment Details</h2>
+
+<form method="POST" action="/confirm-payment" class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
+  <div class="mb-3">
+    <label class="form-label">Phone Number to Receive Payment Request</label>
+    <input 
+      type="text" 
+      name="payment_phone" 
+      class="form-control" 
+      placeholder="2547XXXXXXXX" 
+      pattern="254\d{9}" 
+      title="Use format 2547XXXXXXXX" 
+      required
+    >
+    <div class="form-text">This number will receive the STK Push.</div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Amount (KES)</label>
+    <input type="text" class="form-control" value="{{ user.price }}" readonly>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Vehicle Registration</label>
+    <input type="text" class="form-control" value="{{ user.reg }}" readonly>
+  </div>
+
+  <input type="hidden" name="latitude" id="lat" value="{{ user.latitude or '' }}">
+  <input type="hidden" name="longitude" id="lng" value="{{ user.longitude or '' }}">
+
+
+  <div class="text-center mt-4">
+    <button type="submit" class="btn btn-success btn-lg">Confirm & Pay</button>
+  </div>
+</form>
+
+{% endblock %}

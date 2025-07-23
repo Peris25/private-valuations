@@ -21,9 +21,9 @@ BODY_TYPE_CATEGORY_MAP = {
 }
 
 CATEGORY_PRICES = {
-    "Saloon": 2,
+    "Saloon": 1,
     "Hatchback": 2000,
-    "Station Wagon": 2500,
+    "Station Wagon": 1,
     "SUV/4WD": 3000,
     "Pick-up": 2500,
     "Van": 2500,

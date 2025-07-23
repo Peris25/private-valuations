@@ -56,14 +56,15 @@ def initiate_stk(phone, amount):
     logging.info("STK PUSH RESPONSE: %s", r.json())
     return r.json()
 
-@payments_bp.route('/pay', methods=['GET'])
+@payments_bp.route('/pay', methods=['GET', 'POST'])
 def pay():
     session.modified = True  # Ensure latest session data is used
     user = dict(session.get("user", {}))  # Force copy to avoid mutability weirdness
 
     logging.info(f"[PAY] Loaded user from session: lat={user.get('latitude')} lng={user.get('longitude')}")
 
-    phone = user.get("phone")
+    phone = session.get("payment_phone") 
+    logging.info(f"[PAY] Payment phone: {phone}")
     amount = user.get("price")
     body_type = user.get('bodyType')
 
@@ -80,7 +81,8 @@ def pay():
             
             payment = PaymentRequest(
                 checkout_id=checkout_id,
-                phone=phone,
+                phone=user.get("phone"),
+                stk_phone=phone,
                 first_name=user.get("firstName"),
                 last_name=user.get("lastName"),
                 email=user.get("email"),
@@ -113,8 +115,7 @@ def payment_success():
     if not payment or payment.status != 'success':
         return redirect('/preview')
 
-    return render_template("payment_success.html", user=payment)
-
+    return render_template("payment_success.html", user=session.get('user'))
 
 @payments_bp.route('/payment-status', methods=['GET'])
 def payment_status():

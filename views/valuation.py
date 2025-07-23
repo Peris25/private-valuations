@@ -1,6 +1,7 @@
 
 import logging
-from flask import Blueprint, render_template, request, redirect, session
+import re
+from flask import Blueprint, flash, render_template, request, redirect, session
 import os
 from utils.ocr import extract_vehicle_info
 from utils.mapping import get_category_and_price
@@ -58,5 +59,38 @@ def preview_and_pay():
         session.modified = True
         logging.info(f"Location: {session['user'].get('latitude')} , {session['user'].get('longitude')}")
 
+        return redirect('/confirm_payment')
+    return render_template("preview_and_pay.html", 
+                           user=session.get('user'),
+                           geoplaces_api_key=os.getenv("GEOPLACES_API_KEY"))
+
+@valuation_bp.route('/confirm-payment', methods=['GET', 'POST'])
+def confirm_payment():
+    print("🔔 /confirm-payment route hit!")
+    user = session.get('user', {})
+
+    if request.method == 'POST':
+
+        session['user']['latitude'] = request.form.get('latitude')
+        session['user']['longitude'] = request.form.get('longitude')
+        logging.info(f"Location confirmed: {session['user']['latitude']}, {session['user']['longitude']}")  
+        # Get phone number from the form
+        payment_phone = request.form.get('payment_phone', '').strip()
+
+        # Validate format
+        if not payment_phone or not re.match(r"^2547\d{8}$", payment_phone):
+            flash("Invalid phone number. Use format 2547XXXXXXXX.")
+            return redirect('/confirm-payment')
+
+        # Log for debug
+        logging.info(f"[CONFIRM PAYMENT] Payment phone: {payment_phone}")
+
+        # Save it to session separately
+        session['payment_phone'] = payment_phone
+        session.modified = True
+
         return redirect('/pay')
-    return render_template("preview_and_pay.html", user=session.get('user'))
+
+    return render_template("confirm_payment.html", user=user)
+
+

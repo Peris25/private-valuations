@@ -8,6 +8,7 @@ class PaymentRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     checkout_id = db.Column(db.String, unique=True, nullable=False)
     phone = db.Column(db.String, nullable=False)
+    stk_phone = db.Column(db.String, nullable=False)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     email = db.Column(db.String)
