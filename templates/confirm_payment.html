@@ -2,7 +2,8 @@
 {% block title %}Confirm Payment Details{% endblock %}
 {% block content %}
 
-<h2 class="mb-4 text-center">Confirm Payment Details</h2>
+<h2 class="mb-4 text-center" style="color: navy;">Confirm Payment Details</h2>
+
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -42,7 +43,7 @@
 
 
   <div class="text-center mt-4">
-    <button type="submit" class="btn btn-success btn-lg">Confirm & Pay</button>
+    <button type="submit" class="btn btn-danger btn-lg">Confirm & Pay</button>
   </div>
 </form>
 
