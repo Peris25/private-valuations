@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -13,14 +12,12 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
-
 # Configure the database
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 migrate = Migrate(app, db)
-
 
 # Register Blueprints
 from views.valuation import valuation_bp
@@ -35,6 +32,11 @@ app.register_blueprint(callback_bp)
 from test import test_bp
 app.register_blueprint(test_bp)
 
+# ✅ Allow iframe embedding (for WordPress integration)
+@app.after_request
+def allow_iframe(response):
+    response.headers['X-Frame-Options'] = 'ALLOWALL'
+    return response
+
 if __name__ == '__main__':
     app.run(debug=False)
-
