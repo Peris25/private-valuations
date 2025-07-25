@@ -35,8 +35,10 @@ app.register_blueprint(test_bp)
 # ✅ Allow iframe embedding (for WordPress integration)
 @app.after_request
 def allow_iframe(response):
+    response.headers.pop('X-Frame-Options', None)  # this line is important
     response.headers['X-Frame-Options'] = 'ALLOWALL'
     return response
+
 
 if __name__ == '__main__':
     app.run(debug=False)
