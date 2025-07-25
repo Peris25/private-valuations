@@ -59,7 +59,7 @@ def preview_and_pay():
         session.modified = True
         logging.info(f"Location: {session['user'].get('latitude')} , {session['user'].get('longitude')}")
 
-        return redirect('/confirm_payment')
+        return redirect('/confirm-payment')
     return render_template("preview_and_pay.html", 
                            user=session.get('user'),
                            geoplaces_api_key=os.getenv("GEOPLACES_API_KEY"))

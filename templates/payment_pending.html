@@ -22,7 +22,7 @@
         if (data.status === "success") {
           window.location.href = "/success";
         } else if (data.status === "failed") {
-          document.getElementById("status").innerText = "❌ Payment failed. Kindly refresh the page and try again.";
+          document.getElementById("status").innerHTML = `❌ Payment failed.<br><br><a href="/confirm-payment" class="btn btn-outline-danger">Try Again</a>`;
         } else {
           setTimeout(checkPaymentStatus, 3000); 
         }

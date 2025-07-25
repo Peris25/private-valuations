@@ -4,6 +4,14 @@
 
 <h2 class="mb-4 text-center">Confirm Payment Details</h2>
 
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-danger">
+      {{ messages[0] }}
+    </div>
+  {% endif %}
+{% endwith %}
+
 <form method="POST" action="/confirm-payment" class="card shadow-sm p-4 mx-auto" style="max-width: 600px;">
   <div class="mb-3">
     <label class="form-label">Phone Number to Receive Payment Request</label>

@@ -102,7 +102,9 @@ def pay():
         return render_template("payment_pending.html", user=user)
     else:
         session['payment_status'] = 'failed'
-        return f"<h3>STK Push Failed:</h3><pre>{response}</pre>"
+        flash("Payment failed. Please try again.")
+        return redirect('/confirm-payment')
+
 
 
 @payments_bp.route('/success', methods=['GET'])
