@@ -12,6 +12,10 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
+# ✅ SESSION CONFIG FOR IFRAME COOKIE SUPPORT
+app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+app.config['SESSION_COOKIE_SECURE'] = True
+
 # Configure the database
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -35,10 +39,9 @@ app.register_blueprint(test_bp)
 # ✅ Allow iframe embedding (for WordPress integration)
 @app.after_request
 def allow_iframe(response):
-    response.headers.pop('X-Frame-Options', None)  # this line is important
+    response.headers.pop('X-Frame-Options', None)
     response.headers['X-Frame-Options'] = 'ALLOWALL'
     return response
-
 
 if __name__ == '__main__':
     app.run(debug=False)
