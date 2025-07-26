@@ -2,9 +2,15 @@
 {% block title %}Upload Logbook{% endblock %}
 {% block content %}
 
-<h2 class="mb-4 text-center" style="color: navy;">Private Valuation Request</h2>
+<h2 class="mb-4 text-center" style="color: navy;">Initiate a Private Valuation</h2>
 
 <form method="POST" enctype="multipart/form-data" class="card shadow-sm p-4" style="max-width: 600px; margin: auto;">
+  <div class="mb-3">
+    <label class="form-label">Upload Logbook</label>
+    <input type="file" name="logbook" class="form-control" accept="image/*, application/pdf" required>
+    <div class="form-text">Accepted file types: images (JPG, PNG) and PDFs.</div>
+  </div>
+
   <div class="mb-3">
     <label class="form-label">First Name</label>
     <input name="firstName" type="text" class="form-control" placeholder="First Name" required>
@@ -23,11 +29,6 @@
   <div class="mb-3">
     <label class="form-label">Phone</label>
     <input name="phone" type="text" class="form-control" placeholder="2547XXXXXXXX" pattern="254\d{9}" title="Use format 2547XXXXXXXX" required>
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Upload Logbook (Image)</label>
-    <input type="file" name="logbook" class="form-control" accept="image/*, application/pdf" required>
   </div>
 
   <div class="text-center mt-4">
